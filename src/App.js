@@ -11,12 +11,14 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <Routes>
-        <Route path="/" element={<Home_pg />} />
-        <Route path="/wallet" element={<Wallet_pg />} />
-        <Route path="/pool" element={<Pool_pg />} />
-        <Route path="/contact" element={<Contact_pg />} />
-      </Routes>
+      <div className='container mx-auto px-20'>
+        <Routes>
+          <Route path="/" element={<Home_pg />} />
+          <Route path="/wallet" element={<Wallet_pg />} />
+          <Route path="/pool" element={<Pool_pg />} />
+          <Route path="/contact" element={<Contact_pg />} />
+        </Routes>
+      </div>
     </div>
   );
 }
