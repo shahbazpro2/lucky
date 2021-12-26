@@ -31,7 +31,7 @@ const Detail = () => {
                 <CircularProgress />
             </div> : <>
                 <div className="text-xl mb-10 font-bold">{data.name}</div>
-                <div className="grid grid-cols-6 gap-5">
+                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-5">
                     {data?.nfts?.map((d, index) => (
                         <div className='text-center' key={index}>
                             <img className='mx-auto h-20 w-20' src={d.url} alt="img" />

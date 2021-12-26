@@ -21,7 +21,7 @@ const Home = () => {
 
     }, [])
     return (
-        <div className="my-20 grid grid-cols-3 gap-12">
+        <div className="my-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
             {loading ?
                 <div className="col-span-3 text-center h-full">
                     <CircularProgress />
@@ -30,7 +30,7 @@ const Home = () => {
                 data.map((d, index) => (
                     <div key={index} onClick={() => navigate(`/detail/${d.name}`)}>
                         <div className="text-xl mb-5 font-bold">{d.name}</div>
-                        <div className="bg-lightYellow border-[1px] boder-[#e9e9e9] h-[350px] hover:shadow-lg p-5 cursor-pointer rounded-lg flex items-center justify-center">
+                        <div className={`${d.name.toLowerCase() === 'castorena' ? 'bg-[#ffffff]' : 'bg-[#fdffd5]'} border-[1px] boder-[#e9e9e9] h-[350px] hover:shadow-lg p-5 cursor-pointer rounded-lg flex items-center justify-center`}>
                             <img src={d.previewURL} alt="thumbnail" width='300' />
                         </div>
                     </div>
