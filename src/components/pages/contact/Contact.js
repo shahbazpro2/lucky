@@ -2,8 +2,9 @@ import React from 'react'
 
 const Contact = () => {
     return (
-        <div>
-            contact
+        <div className="mt-20 text-center space-y-3">
+            <div className="text-lg">Twitter: @Lucky777Ada</div>
+            <div className="text-lg">Telegram: @Lucky777Pool</div>
         </div>
     )
 }
