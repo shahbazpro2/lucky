@@ -1,4 +1,4 @@
-import { CircularProgress } from '@mui/material';
+import { Badge, CircularProgress } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { fetchApi } from '../../../api/responseApi';
@@ -33,7 +33,15 @@ const Detail = () => {
                 <div className="text-xl mb-10 font-bold">{data.name}</div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-5">
                     {data?.nfts?.map((d, index) => (
-                        <div className='text-center' key={index}>
+                        <div className='text-center relative' key={index}>
+                            <div className="absolute right-20 bottom-[25px]">
+                                {d.priceInLovelace < 0 ?
+                                    <Badge color="info" badgeContent={`Sold`} max={999} /> :
+                                    <Badge color="info" badgeContent={`${d.priceInLovelace / 1000000}A`} max={999} />
+                                }
+
+
+                            </div>
                             <img className='mx-auto h-20 w-20' src={d.url} alt="img" />
                             <div className="text-sm">{d.name}</div>
                         </div>
