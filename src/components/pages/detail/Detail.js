@@ -35,7 +35,7 @@ const Detail = () => {
     const getDate = () => {
         if (singleData?.mintedDateMillis) {
             const date = new Date(singleData.mintedDateMillis);
-            return `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`
+            return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
         }
     }
 
