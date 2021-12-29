@@ -1,4 +1,5 @@
-import { Badge, CircularProgress } from '@mui/material';
+import { Badge, CircularProgress, Modal } from '@mui/material';
+import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { fetchApi } from '../../../api/responseApi';
@@ -7,6 +8,7 @@ const Detail = () => {
     let params = useParams();
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
+    const [open, setOpen] = useState(false)
 
     useEffect(() => {
         console.log(params);
@@ -42,13 +44,21 @@ const Detail = () => {
 
 
                             </div>
-                            <img className='mx-auto h-20 w-20' src={d.url} alt="img" />
+                            <img className='mx-auto h-20 w-20 cursor-pointer' onClick={() => setOpen(true)} src={d.url} alt="img" />
                             <div className="text-sm">{d.name}</div>
                         </div>
                     ))}
                 </div>
             </>
             }
+            <Modal
+                open={open}
+                onClose={() => setOpen(false)}
+            >
+                <div className="w-[500px] h-[200px] absolute rltb-0 m-rltb-auto bg-white rounded-lg p-10" >
+                    hello
+                </div>
+            </Modal>
         </div>
     )
 }

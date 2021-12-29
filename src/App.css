@@ -8,3 +8,13 @@ body{
   font-family: 'Roboto', sans-serif;
   @apply bg-lightYellow;
 }
+
+.rltb-0{
+  @apply right-0 bottom-0 top-0 left-0;
+}
+.m-rltb-auto{
+  @apply mt-auto ml-auto mb-auto mr-auto;
+}
+:focus-visible{
+  outline: none !important;
+}
