@@ -1,8 +1,8 @@
-import { Badge, CircularProgress, Modal } from '@mui/material';
-import { Box } from '@mui/system';
+import { Badge, CircularProgress, Modal, Snackbar } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { fetchApi } from '../../../api/responseApi';
+import FeedbackApi from '../../common/snakAlert/FeedbackApi';
 
 const Detail = () => {
     let params = useParams();
@@ -10,6 +10,7 @@ const Detail = () => {
     const [loading, setLoading] = useState(true)
     const [open, setOpen] = useState(false)
     const [singleData, setSingleData] = useState()
+    const [apiSuccess, setApiSuccess] = useState()
 
     useEffect(() => {
         console.log(params);
@@ -39,6 +40,13 @@ const Detail = () => {
         }
     }
 
+    const copyAddress = () => {
+        var copyText = document.getElementById("wallet");
+        const text = copyText.innerHTML;
+        navigator.clipboard.writeText(text);
+        setApiSuccess(['Address copied!'])
+    }
+
     return (
         <div className="py-20">
             {loading ? <div className="col-span-3 text-center h-full">
@@ -65,11 +73,23 @@ const Detail = () => {
                 open={open}
                 onClose={() => setOpen(false)}
             >
-                <div className="w-[95%] md:w-[500px] h-[90%] absolute rltb-0 m-rltb-auto bg-white rounded-lg p-10" >
+                <div className="w-[95%] md:w-[500px] h-[92%]  overflow-auto absolute rltb-0 m-rltb-auto bg-white rounded-lg p-10" >
                     <div className="text-right">{getDate()}</div>
                     <div className="text-center">
                         <img src={singleData?.url} className='w-[40%] m-auto' alt="img" />
-                        <div className="text-lg">{singleData?.name}</div>
+                        <div className="text-lg">{singleData?.name} {singleData?.priceInLovelace > 0 && `(${singleData?.priceInLovelace / 1000000}A)`}</div>
+                        {singleData?.priceInLovelace < 0 ?
+                            <Badge color="info" badgeContent={`Sold`} sx={{ '.MuiBadge-badge': { fontSize: '16px', padding: '10px 12px' } }} className="text-lg" max={999} />
+                            : <>
+                                <div className="text-sm text-left mt-5">Wallet address</div>
+                                <div className="grid grid-cols-12 gap-3">
+                                    <div id="wallet" className="text-base break-words col-span-11 text-gray-600">
+                                        {singleData?.paymentWallet}
+                                    </div>
+                                    <div className="cursor-pointer col-span-1" onClick={copyAddress}>Copy</div>
+                                </div>
+                            </>
+                        }
                         <div className="mt-10">
                             <ul className="list-none">
                                 {
@@ -80,13 +100,13 @@ const Detail = () => {
                                         </li>
                                     ))
                                 }
-
                             </ul>
 
                         </div>
                     </div>
                 </div>
             </Modal>
+            <FeedbackApi apiSuccess={apiSuccess} setApiSuccess={setApiSuccess} />
         </div>
     )
 }
