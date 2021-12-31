@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { fetchApi } from '../../../api/responseApi';
 import FeedbackApi from '../../common/snakAlert/FeedbackApi';
+import Filters from './Filters';
 
 const Detail = () => {
     let params = useParams();
@@ -11,6 +12,7 @@ const Detail = () => {
     const [open, setOpen] = useState(false)
     const [singleData, setSingleData] = useState()
     const [apiSuccess, setApiSuccess] = useState()
+    const [filtersList, setFiltersList] = useState()
 
     useEffect(() => {
         console.log(params);
@@ -21,7 +23,26 @@ const Detail = () => {
             if (!res.error) {
                 let list = res.data['nft-sections'].list
                 list = list.filter(li => li.name === params.id)
+                const filters = {
+                    'By Value': 'none',
+                    sold: true,
+                    liked: false,
+                }
+
                 if (list.length) {
+                    list[0].nfts?.forEach(l => {
+                        l.variations.forEach(v => {
+                            const split = v.split(':')
+                            if (filters[split[0]]) {
+                                const check = filters[split[0]].filter(f => f === split[1])
+                                if (!check.length)
+                                    filters[split[0]].push(split[1])
+                            } else {
+                                filters[split[0]] = [split[1]]
+                            }
+                        })
+                    })
+                    setFiltersList(filters)
                     setData(list[0])
                 }
             }
@@ -49,17 +70,21 @@ const Detail = () => {
 
     return (
         <div className="py-20">
+
             {loading ? <div className="col-span-3 text-center h-full">
                 <CircularProgress />
             </div> : <>
-                <div className="text-xl mb-10 font-bold">{data.name}</div>
+                <div className="flex justify-between">
+                    <div className="text-xl mb-10 font-bold">{data.name}</div>
+                    <Filters filtersList={filtersList} />
+                </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-5">
                     {data?.nfts?.map((d, index) => (
                         <div className='text-center relative' key={index}>
                             <div className="absolute right-20 bottom-[25px]">
                                 {d.priceInLovelace < 0 ?
                                     <Badge color="info" badgeContent={`Sold`} max={999} /> :
-                                    <Badge color="info" badgeContent={`${d.priceInLovelace / 1000000}A`} max={999} />
+                                    <Badge color="info" badgeContent={`${d.priceInLovelace / 1000000}₳`} max={999} />
                                 }
                             </div>
                             <img className='mx-auto h-20 w-20 cursor-pointer' onClick={() => openModal(d)} src={d.url} alt="img" />
@@ -73,11 +98,11 @@ const Detail = () => {
                 open={open}
                 onClose={() => setOpen(false)}
             >
-                <div className="w-[95%] md:w-[500px] h-[92%]  overflow-auto absolute rltb-0 m-rltb-auto bg-white rounded-lg p-10" >
+                <div className="w-[95%] md:w-[500px] h-[92%] xl:h-[70%]  overflow-auto absolute rltb-0 m-rltb-auto bg-white rounded-lg p-10" >
                     <div className="text-right">{getDate()}</div>
                     <div className="text-center">
                         <img src={singleData?.url} className='w-[40%] m-auto' alt="img" />
-                        <div className="text-lg">{singleData?.name} {singleData?.priceInLovelace > 0 && `(${singleData?.priceInLovelace / 1000000}A)`}</div>
+                        <div className="text-lg">{singleData?.name} {singleData?.priceInLovelace > 0 && `(${singleData?.priceInLovelace / 1000000}₳)`}</div>
                         {singleData?.priceInLovelace < 0 ?
                             <Badge color="info" badgeContent={`Sold`} sx={{ '.MuiBadge-badge': { fontSize: '16px', padding: '10px 12px' } }} className="text-lg" max={999} />
                             : <>
