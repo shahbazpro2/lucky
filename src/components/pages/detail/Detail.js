@@ -25,8 +25,8 @@ const Detail = () => {
                 list = list.filter(li => li.name === params.id)
                 const filters = {
                     'By Value': 'none',
-                    sold: true,
-                    liked: false,
+                    Sold: true,
+                    Liked: false,
                 }
 
                 if (list.length) {
@@ -98,7 +98,7 @@ const Detail = () => {
                 open={open}
                 onClose={() => setOpen(false)}
             >
-                <div className="w-[95%] md:w-[500px] h-[92%] xl:h-[70%]  overflow-auto absolute rltb-0 m-rltb-auto bg-white rounded-lg p-10" >
+                <div className="w-[95%] md:w-[500px] h-[92%] 2xl:h-[70%]  overflow-auto absolute rltb-0 m-rltb-auto bg-white rounded-lg p-10" >
                     <div className="text-right">{getDate()}</div>
                     <div className="text-center">
                         <img src={singleData?.url} className='w-[40%] m-auto' alt="img" />
