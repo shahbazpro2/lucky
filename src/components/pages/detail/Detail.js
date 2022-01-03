@@ -1,33 +1,48 @@
 import { Badge, CircularProgress, Modal, Snackbar } from '@mui/material';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { fetchApi } from '../../../api/responseApi';
 import FeedbackApi from '../../common/snakAlert/FeedbackApi';
 import Filters from './Filters';
+import { getDatabase, ref, query, orderByChild, child, get, orderByValue } from "firebase/database";
 
 const Detail = () => {
     let params = useParams();
+    const [orgData, setOrgData] = useState([])
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
     const [open, setOpen] = useState(false)
     const [singleData, setSingleData] = useState()
     const [apiSuccess, setApiSuccess] = useState()
     const [filtersList, setFiltersList] = useState()
+    const [selectedFilters, setSelectedFilters] = useState({
+        sold: true
+    })
+
+    const mapData = useMemo(() => (
+        data?.map((d, index) => (
+            <div className='text-center relative' key={index}>
+                <div className="absolute right-20 bottom-[25px]">
+                    {d.priceInLovelace < 0 ?
+                        <Badge color="info" badgeContent={`Sold`} max={999} /> :
+                        <Badge color="info" badgeContent={`${d.priceInLovelace / 1000000}₳`} max={999} />
+                    }
+                </div>
+                <img className='mx-auto h-20 w-20 cursor-pointer' onClick={() => openModal(d)} src={d.url} alt="img" />
+                <div className="text-sm">{d.name}</div>
+            </div>
+        ))
+    ), [data])
 
     useEffect(() => {
-        console.log(params);
         (async () => {
-            const res = await fetchApi('pool-info')
+            const res = await fetchApi('pool-info/nft-sections/list')
             setLoading(false)
             console.log(res)
             if (!res.error) {
-                let list = res.data['nft-sections'].list
+                let list = res.data
                 list = list.filter(li => li.name === params.id)
-                const filters = {
-                    'By Value': 'none',
-                    Sold: true,
-                    Liked: false,
-                }
+                const filters = {}
 
                 if (list.length) {
                     list[0].nfts?.forEach(l => {
@@ -43,7 +58,8 @@ const Detail = () => {
                         })
                     })
                     setFiltersList(filters)
-                    setData(list[0])
+                    setData(list[0]?.nfts)
+                    setOrgData(list[0])
                 }
             }
         })()
@@ -68,6 +84,30 @@ const Detail = () => {
         setApiSuccess(['Address copied!'])
     }
 
+    const applyFilter = () => {
+        const d = [...orgData.nfts].
+            filter(f => {
+                if ((!selectedFilters.sold) && (f.priceInLovelace < 0)) return null
+                f.variations.forEach(v => {
+                    const split = v.split(':')
+                    selectedFilters[split[0]]?.includes(split[1])
+                })
+
+                return f
+            }).
+            sort(function (obj1, obj2) {
+                if (selectedFilters.value === 'up')
+                    return obj2.priceInLovelace - obj1.priceInLovelace;
+                else if (selectedFilters.value === 'down')
+                    return obj1.priceInLovelace - obj2.priceInLovelace;
+                return
+            })
+        console.log('d', d, orgData?.nfts)
+        setData([...d])
+
+    }
+    console.log('filter', selectedFilters, selectedFilters.sold)
+
     return (
         <div className="py-20">
 
@@ -75,22 +115,11 @@ const Detail = () => {
                 <CircularProgress />
             </div> : <>
                 <div className="flex justify-between">
-                    <div className="text-xl mb-10 font-bold">{data.name}</div>
-                    <Filters filtersList={filtersList} />
+                    <div className="text-xl mb-10 font-bold">{orgData.name}</div>
+                    <Filters filtersList={filtersList} selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} applyFilter={applyFilter} />
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-5">
-                    {data?.nfts?.map((d, index) => (
-                        <div className='text-center relative' key={index}>
-                            <div className="absolute right-20 bottom-[25px]">
-                                {d.priceInLovelace < 0 ?
-                                    <Badge color="info" badgeContent={`Sold`} max={999} /> :
-                                    <Badge color="info" badgeContent={`${d.priceInLovelace / 1000000}₳`} max={999} />
-                                }
-                            </div>
-                            <img className='mx-auto h-20 w-20 cursor-pointer' onClick={() => openModal(d)} src={d.url} alt="img" />
-                            <div className="text-sm">{d.name}</div>
-                        </div>
-                    ))}
+                    {mapData}
                 </div>
             </>
             }
