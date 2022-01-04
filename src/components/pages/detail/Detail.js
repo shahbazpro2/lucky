@@ -88,10 +88,28 @@ const Detail = () => {
         const d = [...orgData.nfts].
             filter(f => {
                 if ((!selectedFilters.sold) && (f.priceInLovelace < 0)) return null
+                let flag = true, arr = []
                 f.variations.forEach(v => {
                     const split = v.split(':')
-                    selectedFilters[split[0]]?.includes(split[1])
+                    arr[split[0]] = split[1]
                 })
+                console.log(arr)
+                console.log(selectedFilters)
+                selectedFilters && Object.keys(selectedFilters)?.forEach((sf, index) => {
+                    console.log('fff', sf)
+                    if (Array.isArray(selectedFilters[sf])) {
+                        const found = arr[sf].some(r => selectedFilters[sf].includes(r));
+                        console.log('found', found)
+                    }
+
+                })
+
+                console.log('falg', flag)
+
+                /*  f.variations.forEach(v => {
+                     const split = v.split(':')
+                     selectedFilters[split[0]]?.includes(split[1])
+                 }) */
 
                 return f
             }).
