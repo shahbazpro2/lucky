@@ -11,7 +11,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-const Filters = ({ filtersList, selectedFilters, setSelectedFilters, applyFilter }) => {
+const Filters = ({ filtersList, selectedFilters, setSelectedFilters, applyFilter, clearFilter }) => {
     const [open, setOpen] = useState('')
     const handleClick = (val) => {
         val === open ? setOpen('') : setOpen(val)
@@ -77,13 +77,13 @@ const Filters = ({ filtersList, selectedFilters, setSelectedFilters, applyFilter
 
                                 </div>
                             </MenuItem>
-                            <MenuItem onClick={() => setSelectedFilters({ ...selectedFilters, 'liked': !selectedFilters.liked })}>
+                            {/* <MenuItem onClick={() => setSelectedFilters({ ...selectedFilters, 'liked': !selectedFilters.liked })}>
                                 <div className="flex justify-between items-center w-full">
                                     <div>Liked</div>
                                     {selectedFilters?.liked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
 
                                 </div>
-                            </MenuItem>
+                            </MenuItem> */}
                             {filtersList && Object.keys(filtersList)?.map((f, index) =>
                                 <div key={index}>
                                     <div>
@@ -114,7 +114,7 @@ const Filters = ({ filtersList, selectedFilters, setSelectedFilters, applyFilter
                             )
                             }
                             <div className="flex justify-between mx-7 mt-5">
-                                <Button variant='outlined' onClick={() => setSelectedFilters({})}>Clear</Button>
+                                <Button variant='outlined' onClick={clearFilter}>Clear</Button>
                                 <Button variant="outlined" onClick={applyFilter}>Apply</Button>
                             </div>
                         </Menu>

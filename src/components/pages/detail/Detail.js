@@ -1,10 +1,9 @@
-import { Badge, CircularProgress, Modal, Snackbar } from '@mui/material';
+import { Badge, CircularProgress, Modal } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { fetchApi } from '../../../api/responseApi';
 import FeedbackApi from '../../common/snakAlert/FeedbackApi';
 import Filters from './Filters';
-import { getDatabase, ref, query, orderByChild, child, get, orderByValue } from "firebase/database";
 
 const Detail = () => {
     let params = useParams();
@@ -38,7 +37,6 @@ const Detail = () => {
         (async () => {
             const res = await fetchApi('pool-info/nft-sections/list')
             setLoading(false)
-            console.log(res)
             if (!res.error) {
                 let list = res.data
                 list = list.filter(li => li.name === params.id)
@@ -88,30 +86,19 @@ const Detail = () => {
         const d = [...orgData.nfts].
             filter(f => {
                 if ((!selectedFilters.sold) && (f.priceInLovelace < 0)) return null
-                let flag = true, arr = []
+                let flag = {}, arr = []
                 f.variations.forEach(v => {
                     const split = v.split(':')
-                    arr[split[0]] = split[1]
+                    arr[split[0]] = [split[1]]
                 })
-                console.log(arr)
-                console.log(selectedFilters)
                 selectedFilters && Object.keys(selectedFilters)?.forEach((sf, index) => {
-                    console.log('fff', sf)
                     if (Array.isArray(selectedFilters[sf])) {
-                        const found = arr[sf].some(r => selectedFilters[sf].includes(r));
-                        console.log('found', found)
+                        flag[sf] = selectedFilters[sf].some(r => arr[sf]?.includes(r));
                     }
-
                 })
-
-                console.log('falg', flag)
-
-                /*  f.variations.forEach(v => {
-                     const split = v.split(':')
-                     selectedFilters[split[0]]?.includes(split[1])
-                 }) */
-
-                return f
+                let check = Object.values(flag)?.every(element => element === true);
+                if (check)
+                    return f
             }).
             sort(function (obj1, obj2) {
                 if (selectedFilters.value === 'up')
@@ -120,11 +107,14 @@ const Detail = () => {
                     return obj1.priceInLovelace - obj2.priceInLovelace;
                 return
             })
-        console.log('d', d, orgData?.nfts)
         setData([...d])
 
     }
-    console.log('filter', selectedFilters, selectedFilters.sold)
+
+    const clearFilter = () => {
+        setSelectedFilters({})
+        setData([...orgData.nfts])
+    }
 
     return (
         <div className="py-20">
@@ -134,7 +124,7 @@ const Detail = () => {
             </div> : <>
                 <div className="flex justify-between">
                     <div className="text-xl mb-10 font-bold">{orgData.name}</div>
-                    <Filters filtersList={filtersList} selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} applyFilter={applyFilter} />
+                    <Filters filtersList={filtersList} selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} applyFilter={applyFilter} clearFilter={clearFilter} />
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-5">
                     {mapData}
