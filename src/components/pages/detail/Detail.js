@@ -118,7 +118,6 @@ const Detail = () => {
 
     return (
         <div className="py-20">
-
             {loading ? <div className="col-span-3 text-center h-full">
                 <CircularProgress />
             </div> : <>
