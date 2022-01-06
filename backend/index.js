@@ -30,20 +30,9 @@ app.post('/blockfrost', async (req, res) => {
             })
         ))
             .then(data => {
-                // do something with the data
                 const arr = data.map(data => data.data)
-
-                res.send(arr)
+                res.send({ data: arr, address, stake: res1.data.stake_address })
             })
-        /* data.forEach(async f => {
-            if (f.quantity === "1") {
-                const res3 = await axios({
-                    method: 'GET',
-                    url: `https://cardano-mainnet.blockfrost.io/api/v0/assets/${f.unit}`
-                })
-                arr.push(res3.data)
-            }
-        }) */
 
 
     } catch (err) {

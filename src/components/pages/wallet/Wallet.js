@@ -4,11 +4,13 @@ import React, { useEffect, useState } from 'react'
 import API from '../../../api/API'
 import FeedbackApi from '../../common/snakAlert/FeedbackApi'
 import axios from 'axios'
+import WalletList from './WalletList'
 axios.defaults.headers = { project_id: 'mainnetvZcIcrL2zrpDvdHa47mHR6ah7fcx9SnN' }
 const Wallet = () => {
     const [address, setAddress] = useState('')
     const [loading, setLoading] = useState(false)
     const [apiError, setApiError] = useState()
+    const [data, setData] = useState()
 
     useEffect(() => {
         (async () => {
@@ -35,15 +37,7 @@ const Wallet = () => {
                         console.log('data', arr)
                         //res.send(JSON.stringify(data))
                     })
-                /* data.forEach(async f => {
-                    if (f.quantity === "1") {
-                        const res3 = await axios({
-                            method: 'GET',
-                            url: `https://cardano-mainnet.blockfrost.io/api/v0/assets/${f.unit}`
-                        })
-                        arr.push(res3.data)
-                    }
-                }) */
+
 
 
             } catch (err) {
@@ -58,29 +52,39 @@ const Wallet = () => {
         setLoading(true)
         const res = await API('http://localhost:5000/blockfrost/', 'post', { address })
         console.log('res', res)
-        if (res.error) setApiError(res.data)
+        if (res.error) {
+            setApiError(res.data)
+            return
+        }
+        setData(res.data)
         setLoading(false)
 
     }
 
     return (
-        <div className='mt-20 grid grid-cols-7'>
-            <div className="col-start-3 col-span-3">
-                <Card>
-                    <CardContent className="text-center">
-                        <div className="px-7 py-5 space-y-3">
-                            <div className="text-lg">Check your wallet contents</div>
-                            <TextField variant="standard" onChange={(e) => setAddress(e.target.value)} fullWidth />
-                            <div className="text-center">
-                                <LoadingButton loading={loading} variant="contained" onClick={submitWallet}>Check</LoadingButton>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
+        <>
+            {!data ?
+                <div className='mt-20 grid grid-cols-7'>
+                    <div className="col-start-3 col-span-3">
+                        <Card>
+                            <CardContent className="text-center">
+                                <div className="px-7 py-5 space-y-3">
+                                    <div className="text-lg">Check your wallet contents</div>
+                                    <TextField variant="standard" onChange={(e) => setAddress(e.target.value)} fullWidth />
+                                    <div className="text-center">
+                                        <LoadingButton loading={loading} variant="contained" onClick={submitWallet}>Check</LoadingButton>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
 
-            </div>
-            <FeedbackApi apiError={apiError} setApiError={setApiError} />
-        </div>
+                    </div>
+                    <FeedbackApi apiError={apiError} setApiError={setApiError} />
+                </div>
+                :
+                <WalletList data={data} />
+            }
+        </>
     )
 }
 
