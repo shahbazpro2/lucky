@@ -2,13 +2,17 @@
 import axios from 'axios'
 import express from 'express'
 import cors from 'cors'
+import path from 'path'
+const __dirname = path.resolve();
 
 const app = express()
 app.use(cors())
 app.use(express.json());
-const port = 5000
+const port = process.env.PORT || 5000
+const buildPath = path.join(__dirname, '..', 'build')
+app.use(express.static(buildPath))
 
-axios.defaults.headers = { project_id: 'mainnetvZcIcrL2zrpDvdHa47mHR6ah7fcx9SnN' }
+axios.defaults.headers = { project_id: process.env.BLOCKFROST_ID }
 
 app.post('/blockfrost', async (req, res) => {
     const address = req.body.address

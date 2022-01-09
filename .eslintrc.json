@@ -18,6 +18,7 @@
         "react"
     ],
     "rules": {
+        "node": true,
         "no-unused-vars": "off",
         "react/prop-types":  "off"
     }
