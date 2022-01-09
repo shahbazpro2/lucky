@@ -19,9 +19,6 @@
     ],
     "rules": {
         "no-unused-vars": "off",
-        "react/prop-types":  "off",
-        "globals": {
-            "process": true
-          }
+        "react/prop-types":  "off"
     }
 }
