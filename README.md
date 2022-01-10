@@ -6,7 +6,16 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
-### `npm start`
+### `npm run start-client` for react app running
+then change directory to backend folder
+and run:
+###`npm run start` for backend app running
+and you also need to add .env on frontend and backend
+here is example
+.env for frontend 
+REACT_APP_API=http://localhost:5000
+.env for backend
+BLOCKFROST_ID=`Replace with your blockfrost id`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
