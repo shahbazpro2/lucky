@@ -4,7 +4,7 @@ import React from 'react'
 const PoolCard = ({ title, value }) => {
     return (
         <div>
-            <Card variant="outlined">
+            <Card variant="outlined" className="h-[100px]">
                 <CardContent className="text-center">
                     <div className="text-xl">{value}</div>
                     <div className="text-base">{title}</div>

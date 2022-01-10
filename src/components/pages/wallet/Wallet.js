@@ -14,22 +14,23 @@ const Wallet = () => {
     const submitWallet = async () => {
         if (!address) return
         setLoading(true)
-        const res = await API(process.env.API || '' + '/blockfrost/', 'post', { address })
+        const res = await API((process.env.REACT_APP_API || '') + '/blockfrost/', 'post', { address })
         console.log('res', res)
+        setLoading(false)
         if (res.error) {
             setApiError(res.data)
             return
         }
         setData(res.data)
-        setLoading(false)
+
 
     }
 
     return (
         <>
             {!data ?
-                <div className='mt-20 grid grid-cols-7'>
-                    <div className="col-start-3 col-span-3">
+                <div className='mt-20 grid lg:grid-cols-7'>
+                    <div className="lg:col-start-3 col-span-3">
                         <Card>
                             <CardContent className="text-center">
                                 <div className="px-7 py-5 space-y-3">

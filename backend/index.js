@@ -3,6 +3,8 @@ import axios from 'axios'
 import express from 'express'
 import cors from 'cors'
 import path from 'path'
+import dotenv from 'dotenv'
+dotenv.config();
 const __dirname = path.resolve();
 
 const app = express()
@@ -40,7 +42,9 @@ app.post('/blockfrost', async (req, res) => {
 
 
     } catch (err) {
-        res.status(err.response.data.status_code).send(err.response.data.message)
+        if (err.response?.data)
+            res.status(err.response?.data?.status_code).send(err.response?.data?.message)
+        res.status(500).send(err)
     }
 
 })

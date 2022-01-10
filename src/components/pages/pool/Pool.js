@@ -21,7 +21,7 @@ const Pool = () => {
 
 
     return (
-        <div className='grid grid-cols-4 mt-20 gap-5'>
+        <div className='grid grid-cols-2 md:grid-cols-4 mt-10 md:mt-20 gap-5'>
             {
                 loading ? <div className="col-span-4 text-center h-full">
                     <CircularProgress />

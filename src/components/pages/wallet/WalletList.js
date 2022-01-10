@@ -13,8 +13,8 @@ const WalletList = ({ data }) => {
     }
 
     return (
-        <div className='mt-20'>
-            <div className="grid grid-cols-2 gap-4">
+        <div className='mt-10 md:mt-20'>
+            <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
                 <Card sx={{ background: '#95ffff' }} >
                     <CardContent className="text-center cursor-pointer" onClick={() => copyAddress('address', 'Address')}>
                         <div className="text-xl font-bold mb-3">Address</div>
@@ -32,7 +32,7 @@ const WalletList = ({ data }) => {
                     </CardContent>
                 </Card>
             </div>
-            <div className="mt-10 grid grid-cols-6 gap-4">
+            <div className="mt-10 grid md:grid-cols-6 grid-cols-3 gap-4">
                 {data.data?.map((d, index) => (
                     <div className='text-center relative' key={index}>
                         <div className="absolute right-20 bottom-[25px]">

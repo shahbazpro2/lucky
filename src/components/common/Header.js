@@ -13,7 +13,7 @@ const links = [
 const Header = () => {
     const [open, setOpen] = useState(false)
     return (
-        <div className='shadow-md shadow-gray-400 bg-gray-800 text-white'>
+        <div className='shadow-md shadow-green-200 bg-green-500 text-black'>
             <Container>
                 <div className='h-[72px] flex items-center'>
                     <Link to={links[0].url}><div className='text-xl cursor-pointer'>{links[0].name}</div></Link>

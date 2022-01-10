@@ -55,6 +55,7 @@ const Detail = () => {
                             }
                         })
                     })
+                    console.log(list)
                     setFiltersList(filters)
                     setData(list[0]?.nfts)
                     setOrgData(list[0])
@@ -117,7 +118,7 @@ const Detail = () => {
     }
 
     return (
-        <div className="py-20">
+        <div className="my-10 md:my-20">
             {loading ? <div className="col-span-3 text-center h-full">
                 <CircularProgress />
             </div> : <>
@@ -125,7 +126,7 @@ const Detail = () => {
                     <div className="text-xl mb-10 font-bold">{orgData.name}</div>
                     <Filters filtersList={filtersList} selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} applyFilter={applyFilter} clearFilter={clearFilter} />
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-5">
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-5">
                     {mapData}
                 </div>
             </>
@@ -138,11 +139,11 @@ const Detail = () => {
                     <div className="text-right">{getDate()}</div>
                     <div className="text-center">
                         <img src={singleData?.url} className='w-[40%] m-auto' alt="img" />
-                        <div className="text-lg">{singleData?.name} {singleData?.priceInLovelace > 0 && `(${singleData?.priceInLovelace / 1000000}₳)`}</div>
+                        <div className="text-lg">{singleData?.name} {singleData?.priceInLovelace > 0 && `(Drop ${singleData?.priceInLovelace / 1000000}₳)`}</div>
                         {singleData?.priceInLovelace < 0 ?
                             <Badge color="info" badgeContent={`Sold`} sx={{ '.MuiBadge-badge': { fontSize: '16px', padding: '10px 12px' } }} className="text-lg" max={999} />
                             : <>
-                                <div className="text-sm text-left mt-5">Wallet address</div>
+                                <div className="text-base text-left mt-5 font-medium">Wallet address</div>
                                 <div className="grid grid-cols-12 gap-3">
                                     <div id="wallet" className="text-base break-words col-span-11 text-gray-600">
                                         {singleData?.paymentWallet}
@@ -164,6 +165,10 @@ const Detail = () => {
                             </ul>
 
                         </div>
+                        <div className="mt-7 font-medium">
+                            NFT will be sent back to the {`sender's`} address.
+                        </div>
+                        <div className="mt-2 text-sm">(Avg. 1min)</div>
                     </div>
                 </div>
             </Modal>

@@ -21,7 +21,7 @@ const Home = () => {
 
     }, [])
     return (
-        <div className="my-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
+        <div className="my-10 md:my-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
             {loading ?
                 <div className="col-span-3 text-center h-full">
                     <CircularProgress />
