@@ -10,7 +10,7 @@ In the project directory, you can run:
 then change directory to backend folder
 and run:
 
-###`npm run start` for backend app running
+### `npm run start` for backend app running
 
 and you also need to add .env on frontend and backend
 here is example
